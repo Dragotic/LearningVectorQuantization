@@ -4,10 +4,12 @@ public class CompetitiveNeuron {
 
     private Point point;
     private Point weight;
+    private int team;
 
-    CompetitiveNeuron (Point point, Point weight) {
+    CompetitiveNeuron (Point point, Point weight, int team) {
         this.point = point;
         this.weight = weight;
+        this.team = team;
     }
 
     public Point getPoint() {
@@ -29,6 +31,15 @@ public class CompetitiveNeuron {
     @Override
     public String toString() {
         return point +
-                "with weight= " + weight;
+                "with weight= " + weight +
+                " and team= " + team;
+    }
+
+    public int getTeam() {
+        return team;
+    }
+
+    public void setTeam(int team) {
+        this.team = team;
     }
 }
