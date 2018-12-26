@@ -10,12 +10,13 @@ import java.util.concurrent.ThreadLocalRandom;
 public class LVQ {
 
     private static final int M = 5;
+
     private static ArrayList<Point> points = new ArrayList<>();
     private static ArrayList<CompetitiveNeuron> centers = new ArrayList<>();
     private static ArrayList<ArrayList<Point>> clusters = new ArrayList<>();
     private static ArrayList<Double> dispersions = new ArrayList<>();
 
-    private static double learningRate = 0.3;
+    private static double learningRate = 0.1;
     private static int epochs = 5;
 
     public static void main(String[] args) {
