@@ -9,15 +9,14 @@ import java.util.concurrent.ThreadLocalRandom;
 
 public class LVQ {
 
-    private static final int M = 5;
+    private static final int M          = 5;
+    private static final int epochs     = 5;
+    private static double learningRate  = 0.1;
 
-    private static ArrayList<Point> points = new ArrayList<>();
+    private static ArrayList<Point> points              = new ArrayList<>();
     private static ArrayList<CompetitiveNeuron> centers = new ArrayList<>();
     private static ArrayList<ArrayList<Point>> clusters = new ArrayList<>();
-    private static ArrayList<Double> dispersions = new ArrayList<>();
-
-    private static double learningRate = 0.1;
-    private static int epochs = 5;
+    private static ArrayList<Double> dispersions        = new ArrayList<>();
 
     public static void main(String[] args) {
         for (int i = 1; i < 6; i++) {
