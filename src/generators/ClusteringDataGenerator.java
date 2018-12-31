@@ -17,44 +17,32 @@ public class ClusteringDataGenerator {
         DecimalFormat format = new DecimalFormat("0.00");
 
         IntStream.range(0, 100).forEach(value -> {
-            double xValue = ThreadLocalRandom.current().nextDouble(0, 1) - 0.6;
-            double yValue = ThreadLocalRandom.current().nextDouble(0, 1) - 0.6;
+            double xValue = ThreadLocalRandom.current().nextDouble(0, 0.6) - 0.3;
+            double yValue = ThreadLocalRandom.current().nextDouble(0, 0.6) - 0.3;
             points.add(format.format(xValue) + "," + format.format(yValue));
         });
 
         IntStream.range(0, 100).forEach(value -> {
-            double xValue = ThreadLocalRandom.current().nextDouble(0, 1) - 0.6;
-            double yValue = ThreadLocalRandom.current().nextDouble(0.6, 1.4);
+            double xValue = ThreadLocalRandom.current().nextDouble(0, 0.6) - 1.1;
+            double yValue = ThreadLocalRandom.current().nextDouble(0.5, 1.1);
             points.add(format.format(xValue) + "," + format.format(yValue));
         });
 
         IntStream.range(0, 100).forEach(value -> {
-            double xValue = ThreadLocalRandom.current().nextDouble(0, 1) - 0.6;
-            double yValue = - ThreadLocalRandom.current().nextDouble(0.6, 1.4);
+            double xValue = ThreadLocalRandom.current().nextDouble(0, 0.6) - 1.1;
+            double yValue = ThreadLocalRandom.current().nextDouble(0, 0.6) - 1.1;
             points.add(format.format(xValue) + "," + format.format(yValue));
         });
 
         IntStream.range(0, 100).forEach(value -> {
-            double xValue =  - ThreadLocalRandom.current().nextDouble(0.6, 1.4);
-            double yValue =  ThreadLocalRandom.current().nextDouble(0.6, 1.4);
+            double xValue =  ThreadLocalRandom.current().nextDouble(0.5, 1.1);
+            double yValue =  ThreadLocalRandom.current().nextDouble(0, 0.6) - 1.1;
             points.add(format.format(xValue) + "," + format.format(yValue));
         });
 
         IntStream.range(0, 100).forEach(value -> {
-            double xValue =  - ThreadLocalRandom.current().nextDouble(0.6, 1.4);
-            double yValue =  - ThreadLocalRandom.current().nextDouble(0.6, 1.4);
-            points.add(format.format(xValue) + "," + format.format(yValue));
-        });
-
-        IntStream.range(0, 100).forEach(value -> {
-            double xValue =   ThreadLocalRandom.current().nextDouble(0.6, 1.4);
-            double yValue =  - ThreadLocalRandom.current().nextDouble(0.6, 1.4);
-            points.add(format.format(xValue) + "," + format.format(yValue));
-        });
-
-        IntStream.range(0, 100).forEach(value -> {
-            double xValue =  ThreadLocalRandom.current().nextDouble(0.6, 1.4);
-            double yValue =  ThreadLocalRandom.current().nextDouble(0.6, 1.4);
+            double xValue =  - ThreadLocalRandom.current().nextDouble(0.5, 1.1);
+            double yValue =  - ThreadLocalRandom.current().nextDouble(0.5, 1.1);
             points.add(format.format(xValue) + "," + format.format(yValue));
         });
 

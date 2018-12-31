@@ -1,5 +1,16 @@
 package lvq;
 
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.ChartPanel;
+import org.jfree.chart.JFreeChart;
+import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.chart.plot.XYPlot;
+import org.jfree.data.xy.XYDataset;
+import org.jfree.data.xy.XYSeries;
+import org.jfree.data.xy.XYSeriesCollection;
+
+import javax.swing.*;
+import java.awt.*;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -7,7 +18,7 @@ import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 
-public class LVQ {
+public class LVQ extends JFrame {
 
     private static final int M          = 5;
     private static final int epochs     = 5;
@@ -30,6 +41,12 @@ public class LVQ {
             for (double dis: dispersions) {
                 System.out.println(dis);
             }
+
+            LVQ example = new LVQ("Scatter Chart Example");
+            example.setSize(800, 400);
+            example.setLocationRelativeTo(null);
+            example.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+            example.setVisible(true);
 
             clusters.clear();
             dispersions.clear();
@@ -122,4 +139,53 @@ public class LVQ {
             dispersions.add(dispersion);
         }
     }
+
+    private XYDataset createDataset() {
+        XYSeriesCollection dataset = new XYSeriesCollection();
+
+        XYSeries series = new XYSeries("Centers");
+
+        for (CompetitiveNeuron point : centers) {
+            series.add(point.getWeight().getX(), point.getWeight().getY());
+        }
+
+        dataset.addSeries(series);
+
+        int i=0;
+        for (ArrayList<Point> cluster : clusters) {
+            series = new XYSeries("Cluster " + i);
+            for (Point point : cluster) {
+                series.add(point.getX(), point.getY());
+            }
+            i++;
+            dataset.addSeries(series);
+        }
+
+        return dataset;
+    }
+
+    public LVQ(String title) {
+        super(title);
+
+        // Create dataset
+        XYDataset dataset = createDataset();
+
+        // Create chart
+        JFreeChart chart = ChartFactory.createScatterPlot("All the points",
+                "X-Axis",
+                "Y-Axis",
+                dataset, PlotOrientation.VERTICAL,
+                true, true, false);
+
+
+        //Changes background color
+        XYPlot plot = (XYPlot)chart.getPlot();
+        plot.setBackgroundPaint(new Color(255,228,196));
+
+
+        // Create Panel
+        ChartPanel panel = new ChartPanel(chart);
+        setContentPane(panel);
+    }
+
 }
