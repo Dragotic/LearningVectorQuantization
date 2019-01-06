@@ -20,14 +20,20 @@ import java.util.concurrent.ThreadLocalRandom;
 
 public class LVQ extends JFrame {
 
-    private static final int M          = 5;
-    private static final int epochs     = 5;
-    private static double learningRate  = 0.1;
+    private static final int M            = 7;
+    private static final int epochs       = 5;
+    private static double learningRate    = 0.1;
+
+    private static double totalDispersion         = 0.0;
+    private static double previousTotalDispersion = 0.0;
 
     private static ArrayList<Point> points              = new ArrayList<>();
     private static ArrayList<CompetitiveNeuron> centers = new ArrayList<>();
     private static ArrayList<ArrayList<Point>> clusters = new ArrayList<>();
     private static ArrayList<Double> dispersions        = new ArrayList<>();
+
+    private static ArrayList<CompetitiveNeuron> previousCenters = new ArrayList<>();
+    private static ArrayList<ArrayList<Point>> previousClusters = new ArrayList<>();
 
     public static void main(String[] args) {
         for (int i = 1; i < 6; i++) {
@@ -38,21 +44,43 @@ public class LVQ extends JFrame {
             predict();
             totalDispersion();
 
+            for (Double dispersion: dispersions) {
+                totalDispersion += dispersion;
+            }
+
             for (double dis: dispersions) {
                 System.out.println(dis);
             }
+            System.out.println("Total Dispersion for this iteration=" + totalDispersion);
 
-            LVQ example = new LVQ("Scatter Chart Example");
-            example.setSize(800, 400);
-            example.setLocationRelativeTo(null);
-            example.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-            example.setVisible(true);
+            if (previousTotalDispersion == 0.0 || previousTotalDispersion > totalDispersion) {
+                previousTotalDispersion = totalDispersion;
+
+                previousCenters.clear();
+                previousClusters.clear();
+
+                for (CompetitiveNeuron neuron: centers) {
+                    previousCenters.add(neuron);
+                }
+
+                for (ArrayList<Point> cluster: clusters) {
+                    previousClusters.add(cluster);
+                }
+            }
 
             clusters.clear();
             dispersions.clear();
             points.clear();
             centers.clear();
+            totalDispersion = 0.0;
+
+
         }
+        LVQ example = new LVQ("Scatter Chart Example");
+        example.setSize(800, 400);
+        example.setLocationRelativeTo(null);
+        example.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        example.setVisible(true);
 
     }
 
@@ -145,14 +173,14 @@ public class LVQ extends JFrame {
 
         XYSeries series = new XYSeries("Centers");
 
-        for (CompetitiveNeuron point : centers) {
+        for (CompetitiveNeuron point : previousCenters) {
             series.add(point.getWeight().getX(), point.getWeight().getY());
         }
 
         dataset.addSeries(series);
 
         int i=0;
-        for (ArrayList<Point> cluster : clusters) {
+        for (ArrayList<Point> cluster : previousClusters) {
             series = new XYSeries("Cluster " + i);
             for (Point point : cluster) {
                 series.add(point.getX(), point.getY());
