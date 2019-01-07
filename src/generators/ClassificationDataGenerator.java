@@ -6,54 +6,58 @@ import java.util.stream.IntStream;
 
 public class ClassificationDataGenerator {
 
-    private static Map<Float, Float> samples1 = new HashMap<>();
-    private static Map<Float, Float> samples2 = new HashMap<>();
+    private static Map<Float, Float> trainSet = new HashMap<>();
+    private static Map<Float, Float> testSet = new HashMap<>();
 
     public static void main(String[] args) throws IOException {
         Random rnd = new Random();
 
-        // Training Set - Generate a value in [0, 1]
-        IntStream.range(0, 750)
+        // Training Set - Generate a value in [0, 2]
+        IntStream.range(0, 1500)
                 .forEach(value -> {
-                    samples1.put(rnd.nextFloat(), rnd.nextFloat());
+                    trainSet.put(rnd.nextFloat() * 2, rnd.nextFloat() * 2);
                 });
 
-        IntStream.range(0, 750)
+        IntStream.range(0, 1500)
                 .forEach(value -> {
-                    samples2.put(rnd.nextFloat(), rnd.nextFloat());
+                    testSet.put(rnd.nextFloat() * 2, rnd.nextFloat() * 2);
                 });
 
-        // Test Set - Generate a value in [-1, 0]
-        IntStream.range(0, 750)
+        // Test Set - Generate a value in [-2, 0]
+        IntStream.range(0, 1500)
                 .forEach(value -> {
-                    samples1.put(rnd.nextFloat() -1, rnd.nextFloat() -1);
+                    trainSet.put((rnd.nextFloat() * 2) - 2, (rnd.nextFloat() * 2) - 2);
                 });
 
-        IntStream.range(0, 750)
+        IntStream.range(0, 1500)
                 .forEach(value -> {
-                    samples2.put(rnd.nextFloat() -1, rnd.nextFloat() -1);
+                    testSet.put((rnd.nextFloat() * 2) - 2, (rnd.nextFloat() * 2) - 2);
                 });
 
-        writeToFile("classification_training_data.txt", samples1);
-        writeToFile("classification_test_data.txt", samples2);
+        writeToFile("classification_training_data.txt", trainSet);
+        writeToFile("classification_test_data.txt", testSet);
     }
 
     private static void writeToFile(String filename, Map<Float, Float> data) throws IOException {
         BufferedWriter bufferedWriter= new BufferedWriter(new FileWriter(
                 new File(filename)));
-        // gia kathe zeugos
+        // For each pair (x, y)
         data.forEach((x, y) -> {
             String result = "";
 
-            // Sinthiki 1 (x-0.5)^2 + (y-0.5)^2  < 0.16
-            if (Math.pow((x - 0.5), 2) + Math.pow((y - 0.5), 2) < 0.16) {
+            // Condition 1, 2: (x - 1) ^ 2 + (y - 1) ^ 2 <= 0.16 OR (x + 1) ^ 2 + (y + 1) ^ 2 <= 0.16
+            if ((Math.pow((x - 1), 2) + Math.pow((y - 1), 2) <= 0.16) || Math.pow((x + 1), 2) + Math.pow((y + 1), 2) <= 0.16) {
                 result = "C1";
             }
-            // Sinthiki 2 (x + 0.5)^2 + (y + 0.5)^2  < 0.16
-            else if (Math.pow((x + 0.5), 2) + Math.pow((y + 0.5), 2) < 0.16) {
+            // Condition 3: (x - 1) ^ 2 + (y - 1) ^ 2 > 0.16 AND (x - 1) ^ 2 + (y - 1) ^ 2 < 0.64
+            else if ((Math.pow((x - 1), 2) + Math.pow((y - 1), 2) > 0.16) && (Math.pow((x - 1), 2) + Math.pow((y - 1), 2) < 0.64)) {
                 result = "C2";
             }
-            // Alliws Sinthiki 3
+            // Condition 4: (x + 1) ^ 2 + (y + 1) ^ 2 > 0.16 AND (x + 1) ^ 2 + (y + 1) ^ 2 < 0.64
+            else if ((Math.pow((x + 1), 2) + Math.pow((y + 1), 2) > 0.16) && (Math.pow((x + 1), 2) + Math.pow((y + 1), 2) < 0.64)) {
+                result = "C2";
+            }
+            // Else category = C3
             else {
                 result = "C3";
             }
@@ -63,7 +67,7 @@ public class ClassificationDataGenerator {
                     .append(",")
                     .append(result);
 
-            // Append sto arxeio x,y,kathgoria
+            // Append to file x, y, category
             try {
                 bufferedWriter.write(builder.toString() + "\n");
             } catch (IOException e) {
@@ -73,5 +77,6 @@ public class ClassificationDataGenerator {
         });
         bufferedWriter.close();
     }
+
 }
 
